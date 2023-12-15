@@ -4,10 +4,10 @@ from googleapiclient.discovery import build
 DEVELOPER_KEY = config.API_KEY
 YOUTUBE_API_SERVICE_NAME = 'youtube'
 YOUTUBE_API_VERSION = 'v3'
+youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
+        developerKey=DEVELOPER_KEY)
 
 def reviews_search(movie_name):
-    youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
-        developerKey=DEVELOPER_KEY)
 
     search_response = youtube.search().list(
         part='id,snippet',
@@ -30,3 +30,12 @@ def reviews_search(movie_name):
         })
 
     return reviews_list
+
+def get_full_description(video_id):
+    
+    video = youtube.videos().list(
+        id=video_id,
+        part='snippet',
+    ).execute()
+
+    return video['items'][0]['snippet']['description']
